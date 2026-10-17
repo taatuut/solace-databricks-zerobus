@@ -1,0 +1,11 @@
+# Copy to terraform.tfvars (gitignored). The API token and base URL are NOT
+# set here: run-terraform.sh takes them from ../solace-cloud-api/.env, so
+# they exist in one place only.
+
+# Look up current values with ../solace-cloud-api/lookup-service-options.sh.
+# aks-eastus = same Azure region (East US) as the Databricks workspace.
+datacenter_id = "aks-eastus"
+
+service_class_id = "DEVELOPER"
+message_vpn_name = "zerobus-demo"
+name_prefix      = "ez-zerobus-demo"

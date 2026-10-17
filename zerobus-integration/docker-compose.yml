@@ -1,0 +1,20 @@
+# Runs the self-managed Solace Micro-Integration for Databricks Zerobus.
+# Image name per Solace's Docker Hub listing -- confirm the current tag at
+# https://hub.docker.com/r/solace/solace-micro-integration-databricks-zerobus
+# before relying on ":latest" for anything beyond a quick demo.
+
+services:
+  zerobus-integration:
+    image: solace/solace-micro-integration-databricks-zerobus:latest
+    container_name: zerobus-integration
+    env_file:
+      - .env
+    # NOT CONFIRMED: the exact in-container config path (Spring Boot's
+    # usual /config convention is assumed here). Verify against Solace's
+    # "Deploying a self-managed Micro-Integration" guide and adjust the
+    # mount target if it differs.
+    volumes:
+      - ./application.yml:/config/application.yml:ro
+    ports:
+      - "8081:8090" # Actuator health/info endpoint (app listens on 8090) -- see README.md
+    restart: unless-stopped

@@ -1,0 +1,54 @@
+# Copy to application.yml. Leave the ${...} references and supply real
+# values via .env / docker-compose's env_file -- see README.md. Never commit
+# application.yml with real values filled in directly.
+#
+# Format confirmed against Solace's docs (Understanding the application.yml
+# File, Enabling Workflows, Zerobus Configuring Connection Details):
+#   - broker connection under solace.java (kebab-case keys)
+#   - at least one workflow must be enabled under solace.connector.workflows
+#   - bindings are input-<id> / output-<id>, id between 0 and 19
+#   - the target table is the fully-qualified name catalog.schema.table
+#
+# Property reference: ../docs/zerobus-integration.md
+
+solace:
+  java:
+    host: ${SOLACE_SMF_HOST:tcp://localhost:55554}
+    msg-vpn: ${SOLACE_MSG_VPN:zerobus-demo}
+    client-username: ${SOLACE_CLIENT_USERNAME:CHANGEME}
+    client-password: ${SOLACE_CLIENT_PASSWORD:CHANGEME}
+    connect-retries: -1
+    reconnect-retries: -1
+  connector:
+    workflows:
+      0:
+        enabled: true
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        input-0:
+          destination: ${SOLACE_QUEUE_NAME:q-zerobus-ingest}
+          binder: solace
+        output-0:
+          destination: ${DATABRICKS_CATALOG:CHANGEME}.${DATABRICKS_SCHEMA:CHANGEME}.${DATABRICKS_TABLE:CHANGEME}
+          binder: dbzerobus
+
+databricks:
+  url: ${DATABRICKS_URL:https://CHANGEME.cloud.databricks.com}
+  serverEndpoint: ${DATABRICKS_SERVER_ENDPOINT:CHANGEME}
+  clientId: ${DATABRICKS_CLIENT_ID:CHANGEME}
+  clientSecret: ${DATABRICKS_CLIENT_SECRET:CHANGEME}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# Uncomment for detailed logs (payloads, stream creation, failure reasons):
+# logging:
+#   level:
+#     com.solace.connector: DEBUG
+#     com.databricks.zerobus: DEBUG

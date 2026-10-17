@@ -1,0 +1,58 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Unit test / coverage reports
+.coverage
+.pytest_cache/
+
+# Environments
+.env
+.envrc
+.venv
+env/
+venv/
+
+# macOS
+.DS_Store
+
+# Solace Cloud / vendor API tokens and other local secrets (never commit these)
+token-*.txt
+*.token
+
+# Diagnostic script output (can echo back hostnames/usernames from .env)
+output/
+
+# Terraform (cloud-setup/terraform/) -- state and local overrides contain
+# generated credentials in plaintext, and real tfvars contain API tokens
+cloud-setup/terraform/.terraform/
+cloud-setup/terraform/.terraform.lock.hcl
+cloud-setup/terraform/*.tfstate
+cloud-setup/terraform/*.tfstate.*
+cloud-setup/terraform/terraform.tfvars
+cloud-setup/terraform/*.auto.tfvars
+cloud-setup/terraform/crash.log
+cloud-setup/terraform/crash.*.log
+
+# Any local, filled-in connector/application config that may hold real
+# credentials (e.g. a Spring Boot application.yml for a Micro-Integration) --
+# keep only the matching *.example / *.yml.example checked in
+**/application.yml
+**/application.yaml
+
+# Console screenshots used in docs/databricks-setup.md -- they show real
+# workspace/subscription/user identifiers, so they stay local
+docs/images/
+
+# Personal working notes (kept locally, not published). Generic, shareable
+# content lives in docs/notes-and-gotchas.md and docs/runbook.md
+AGENTS.md
+PLAN.md
+SKILLS.md
+TODO.md
