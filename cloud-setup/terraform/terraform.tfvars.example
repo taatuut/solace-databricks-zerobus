@@ -3,8 +3,11 @@
 # they exist in one place only.
 
 # Look up current values with ../solace-cloud-api/lookup-service-options.sh.
-# aks-eastus = same Azure region (East US) as the Databricks workspace.
-datacenter_id = "aks-eastus"
+# The datacenter must have spare non-broker capacity or the managed
+# Micro-Integration ends in "error" (see docs/cloud-managed-micro-integration.md).
+# eks-us-east-1a worked for this demo; the broker region does not need to
+# match the Databricks region. Available ids differ per account.
+datacenter_id = "eks-us-east-1a"
 
 service_class_id = "DEVELOPER"
 message_vpn_name = "zerobus-demo"

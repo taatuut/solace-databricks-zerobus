@@ -51,46 +51,23 @@ steps for both paths, including the Databricks permissions needed.
   runs to the Databricks workspace, with no proxy in between (a proxy
   that strips HTTP/2 headers breaks the gRPC connection Zerobus uses).
 
-## Step by step: from zero to a running demo
+## Step by step
 
-### 1. Set up Databricks
+The complete, ordered instructions (with every command and the Databricks
+permissions) are in [`docs/runbook.md`](docs/runbook.md). In short:
 
-See [`docs/zerobus-integration.md`](docs/zerobus-integration.md) for the
-full prerequisite checklist (table, service principal, grants).
-[`docs/databricks-setup.md`](docs/databricks-setup.md) is the Azure console
-walk-through.
+1. **Databricks, once:** table, service principal with the three grants,
+   credentials in `zerobus-integration/.env` (runbook Part 1).
+2. **Path A, local:** `local-broker/` (Docker broker, configure script),
+   then `zerobus-integration/` (self-managed Micro-Integration), then
+   `demo-apps/publisher.py` (runbook Path A).
+3. **Path B, Solace Cloud:** `cloud-setup/` scripts create the broker and
+   the Cloud-Managed Micro-Integration, then `publisher.py --target cloud`
+   (runbook Path B).
+4. **Verify:** query the Delta table in Databricks SQL.
 
-### 2. Start and configure the local broker
-
-```bash
-cd local-broker
-./docker-run.sh
-cp .env.example .env   # fill in real values
-./semp/configure-local-broker.sh
-```
-
-### 3. Configure and start the Zerobus Micro-Integration
-
-```bash
-cd zerobus-integration
-cp application.yml.example application.yml   # fill in real values, never commit this file
-cp .env.example .env
-docker compose up
-```
-
-See [`zerobus-integration/README.md`](zerobus-integration/README.md) for
-what each property means.
-
-### 4. Run the demo data producer
-
-```bash
-cd demo-apps
-pip install -r requirements.txt
-python publisher.py
-```
-
-Then confirm the rows arrive in Databricks (`SELECT * FROM
-<catalog>.<schema>.<table> ORDER BY event_time DESC LIMIT 20`).
+All commands in the docs run from the repository root unless a `cd` says
+otherwise.
 
 ## Troubleshooting
 

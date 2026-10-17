@@ -11,6 +11,10 @@ side and the same publisher:
 | Set up with | `local-broker/`, `zerobus-integration/` | `cloud-setup/` (scripted) |
 | Publisher | `python publisher.py` | `python publisher.py --target cloud` |
 
+All commands run from the repository root unless a `cd` says otherwise.
+Copy-paste them one line at a time. You need a terminal on macOS or
+Linux; `curl`, `git` and Docker (Path A) are assumed.
+
 Do Part 1 (Databricks) once. Then do Path A, Path B or both. Both paths
 write to the same Delta table with the same service principal.
 
@@ -107,7 +111,9 @@ cp .env.example .env
 ```
 
 Set `DATABRICKS_URL` (workspace URL), `DATABRICKS_SERVER_ENDPOINT`
-(`https://<workspace-id>.zerobus.<region>.azuredatabricks.net`),
+(`https://<workspace-id>.zerobus.<region>.azuredatabricks.net`; the
+workspace ID is the number in the workspace URL
+`https://adb-<workspace-id>.<n>.azuredatabricks.net`),
 `DATABRICKS_CLIENT_ID`, `DATABRICKS_CLIENT_SECRET`, `DATABRICKS_CATALOG`
 (your catalog), `DATABRICKS_SCHEMA` (`default`) and
 `DATABRICKS_TABLE` (`zerobus_demo_events`).
@@ -166,6 +172,10 @@ a password of your choice for the health check. Leave
 ```bash
 docker compose up -d
 ```
+
+On Apple Silicon Docker warns that the image platform (`linux/amd64`)
+does not match the host and runs it under emulation; startup takes
+about 15 seconds. This is expected.
 
 ### A.3 Health check
 
@@ -234,6 +244,9 @@ the token.
 ./discover-micro-integration.sh
 ./lookup-service-options.sh
 ```
+
+The second script prints the available datacenter ids, service classes
+and existing services (full output in `output/`).
 
 Copy `cloud-setup/terraform/terraform.tfvars.example` to `terraform.tfvars`
 and set `datacenter_id` (this demo: `eks-us-east-1a`). The datacenter must
@@ -315,6 +328,17 @@ To move to another datacenter: restore the old `datacenter_id` in
 `terraform.tfvars`, destroy, set the new value, apply, then repeat B.4 to
 B.6. Details and the problems met: [`../cloud-setup/README.md`](../cloud-setup/README.md)
 and [`cloud-managed-micro-integration.md`](cloud-managed-micro-integration.md).
+
+## If something fails
+
+| Symptom | Where to look |
+| --- | --- |
+| Micro-Integration container exits or loops | `docker logs zerobus-integration`; table of known errors in [`zerobus-integration.md`](zerobus-integration.md) |
+| Rows do not arrive, events in `dmq-zerobus-ingest` | the table schema, `event_time` as epoch microseconds, and the service principal grants (1.1) |
+| `401 Your permissions have changed` from a Solace Cloud script | wrong `SOLACE_CLOUD_API_BASE` for your organization's Home Cloud (B.1) |
+| Cloud Micro-Integration `error` after ~10 minutes, empty log | no spare non-broker capacity in the datacenter; pick another (B.2) |
+| Cloud Micro-Integration `running`, then `down` | Console, Micro-Integrations, View Logs (B.6) |
+| Publisher: untrusted certificate (cloud) | re-run `configure-cloud-broker.sh` (B.4) |
 
 ## Between demo runs
 

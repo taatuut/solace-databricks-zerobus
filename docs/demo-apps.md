@@ -4,6 +4,7 @@ First-time setup of everything: [`runbook.md`](runbook.md).
 
 ## Proposed script (matching the presentation/workshop)
 
+All commands run from the repository root unless a `cd` says otherwise.
 Before starting: both containers are up (`docker ps` shows
 `zerobus-demo-local-broker` and `zerobus-integration`) and the health
 check below returns `UP`.

@@ -5,9 +5,13 @@ Provisions the Solace Cloud service(s) for this demo repeatably. See
 
 ## First time
 
+Edit `terraform.tfvars` after copying it: datacenter, service class, VPN
+name and name prefix (no secrets in this file). Skip `undeploy` below if
+the Micro-Integration is not running.
+
 ```bash
 cd cloud-setup/terraform
-cp terraform.tfvars.example terraform.tfvars   # datacenter, class, VPN name, prefix: no secrets
+cp terraform.tfvars.example terraform.tfvars
 ./run-terraform.sh init
 ./run-terraform.sh plan
 ./run-terraform.sh apply
@@ -48,7 +52,7 @@ Delete the Micro-Integration first (it is not managed by Terraform):
 
 ```bash
 cd cloud-setup/solace-cloud-api
-./micro-integration.sh undeploy   # if running
+./micro-integration.sh undeploy
 ./micro-integration.sh delete
 cd ../terraform
 ./run-terraform.sh destroy

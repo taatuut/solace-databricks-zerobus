@@ -13,20 +13,24 @@ payload, and the table DDL (see `../docs/zerobus-integration.md`).
 ## Usage
 
 ```bash
+cd demo-apps
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-python publisher.py --dry-run           # sanity-check payloads, no broker needed
+python publisher.py --dry-run
 python publisher.py --count 20 --interval 0.5
-python publisher.py --target cloud --count 5   # Solace Cloud broker (TLS)
+python publisher.py --target cloud --count 5
 ```
 
-`--target cloud` reads the broker host and generated publisher credentials
-from `cloud-setup/output/cloud-broker.env` (created by
-`cloud-setup/solace-cloud-api/configure-cloud-broker.sh`) and trusts the
-certificates in `cloud-setup/output/trust-store/`.
+Run these from the `demo-apps/` folder. `--dry-run` prints the payloads it
+would publish instead of connecting to a broker, which is useful for
+checking the data shape before any broker or Micro-Integration is running.
 
-`--dry-run` prints the payloads it would publish instead of connecting to
-a broker — useful for checking the generated data shape before the local
-broker or the Micro-Integration is even running.
+`--target cloud` publishes to the Solace Cloud broker over TLS. It reads
+the broker host and the generated publisher credentials from
+`output/cloud-broker.env` in the repository root (created by
+`cloud-setup/solace-cloud-api/configure-cloud-broker.sh`) and trusts the
+certificates in `output/trust-store/`.
 
 See [`../docs/demo-apps.md`](../docs/demo-apps.md) for the proposed
 live-demo script.

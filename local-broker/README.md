@@ -9,6 +9,9 @@ from. See `../docs/topology.md` for the full data flow.
 
 ```bash
 ./docker-run.sh
-cp .env.example .env   # fill in real values
+cp .env.example .env
 ./semp/configure-local-broker.sh
 ```
+
+Fill in `.env` (replace the `CHANGEME` passwords) before running the
+configure script. See [`../docs/runbook.md`](../docs/runbook.md), Path A.
