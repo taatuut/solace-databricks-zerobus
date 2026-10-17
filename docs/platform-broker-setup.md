@@ -11,8 +11,8 @@ for what the Micro-Integration API accepts and the problems met.
 
 The service is created with Terraform (`cloud-setup/terraform/`, run
 through `run-terraform.sh`, which takes the token from
-`cloud-setup/solace-cloud-api/.env`). `solace-cloud-api/create-service.sh`
-and the console are manual alternatives. The datacenter of a service can
+`cloud-setup/solace-cloud-api/.env`). The Solace Cloud Console is a manual
+alternative. The datacenter of a service can
 not be changed afterwards: switching region means destroying the service
 and creating a new one (see the Terraform README).
 

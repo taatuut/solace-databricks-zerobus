@@ -46,9 +46,11 @@ cloud-setup/terraform/crash.*.log
 **/application.yml
 **/application.yaml
 
-# Console screenshots used in docs/databricks-setup.md -- they show real
-# workspace/subscription/user identifiers, so they stay local
-docs/images/
+# Console screenshots show real workspace/subscription/user identifiers, so
+# only redacted copies (named <name>-redacted.<ext>) are committed. Create the
+# redacted copy first, then reference only that file in the docs.
+docs/images/*
+!docs/images/*-redacted.*
 
 # Personal working notes (kept locally, not published). Generic, shareable
 # content lives in docs/notes-and-gotchas.md and docs/runbook.md

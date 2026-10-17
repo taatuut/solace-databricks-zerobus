@@ -1,11 +1,16 @@
 # Runs the self-managed Solace Micro-Integration for Databricks Zerobus.
-# Image name per Solace's Docker Hub listing -- confirm the current tag at
+# Image name per Solace's Docker Hub listing. Docker Hub currently offers only
+# the ":latest" tag (no version tags):
 # https://hub.docker.com/r/solace/solace-micro-integration-databricks-zerobus
-# before relying on ":latest" for anything beyond a quick demo.
+# For reproducible runs, pin the image by digest in .env, see README.md
+# ("Pinning the image"). Without ZEROBUS_MI_IMAGE the default below is used.
 
 services:
   zerobus-integration:
-    image: solace/solace-micro-integration-databricks-zerobus:latest
+    image: ${ZEROBUS_MI_IMAGE:-solace/solace-micro-integration-databricks-zerobus:latest}
+    # The image is published for linux/amd64 only. Pinning the platform makes
+    # Docker on Apple Silicon run it under emulation without a warning.
+    platform: linux/amd64
     container_name: zerobus-integration
     env_file:
       - .env

@@ -53,6 +53,11 @@ from `.env.example`). Never commit the token or paste it in a chat.
 
 ## Order of operations
 
+Shortcut for steps 3 to 6 below, after the token and
+`terraform/terraform.tfvars` are in place: `./setup-cloud.sh preflight`,
+then `./setup-cloud.sh up` (and `./setup-cloud.sh down` to remove
+everything again). The manual steps follow.
+
 All commands run from `cloud-setup/solace-cloud-api/` unless noted, in a
 normal terminal (the scripts call the Solace Cloud and broker endpoints).
 

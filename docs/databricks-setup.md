@@ -6,10 +6,10 @@ Placeholders: `<catalog>` is an existing Unity Catalog catalog you can
 create schemas in, `<schema>` is the schema for the demo table (this demo
 uses `zerobus_demo`).
 
-> The screenshots in `docs/images/` show real workspace, subscription and
-> user identifiers, so that folder is git-ignored and exists only in the
-> local checkout of the author. On a fresh clone the image links below
-> are broken by design; the text stands on its own.
+> The screenshots in `docs/images/` are redacted: browser tabs and address
+> bar, workspace and account names, e-mail addresses, IDs and host names
+> are blacked out. Only files named `*-redacted.*` are committed; the
+> unredacted originals stay local (see `.gitignore`).
 
 Permissions overview (who needs what): see section 1.1 of
 [`runbook.md`](runbook.md).
@@ -23,7 +23,7 @@ of Databricks-side prerequisites and the table DDL.
    Catalog catalogs (plus `system` and the `samples` share) must be
    listed next to the legacy `hive_metastore`.
 
-   ![Catalog explorer](images/01-catalog-unity-catalog.png)
+   ![Catalog explorer](images/01-catalog-unity-catalog-redacted.png)
 
 2. **Premium tier and region.** In the Azure portal open **Azure
    Databricks**, then the workspace. On **Overview** the **Pricing Tier**
@@ -33,15 +33,15 @@ of Databricks-side prerequisites and the table DDL.
    page; East US is listed as supported). The target table must be in
    the same region as the workspace.
 
-   ![Azure Databricks workspaces](images/02-azure-databricks-workspaces.png)
-   ![Workspace overview with Premium tier](images/03-azure-overview-premium.png)
+   ![Azure Databricks workspaces](images/02-azure-databricks-workspaces-redacted.png)
+   ![Workspace overview with Premium tier](images/03-azure-overview-premium-redacted.png)
 
 3. **No compliance security profile.** In the workspace resource open
    **Settings > Security & compliance**. **Enable compliance security
    profile** must be unchecked (it cannot be disabled once enabled, and
    such workspaces are not supported).
 
-   ![Security and compliance settings](images/04-azure-security-compliance.png)
+   ![Security and compliance settings](images/04-azure-security-compliance-redacted.png)
 
 ## 2. Create a SQL warehouse
 
@@ -51,27 +51,27 @@ have none.
 1. In the workspace open **SQL Warehouses** and click **Create SQL
    warehouse**.
 
-   ![No SQL warehouses yet](images/05-sql-warehouses-empty.png)
+   ![No SQL warehouses yet](images/05-sql-warehouses-empty-redacted.png)
 
 2. Name `zerobus-demo`, cluster size **2X-Small**, auto stop after **10**
    minutes, scaling min 1 / max 1, type **Serverless**. Click **Create**.
 
-   ![New SQL warehouse dialog](images/06-new-sql-warehouse-dialog.png)
+   ![New SQL warehouse dialog](images/06-new-sql-warehouse-dialog-redacted.png)
 
 3. Wait until the status is **Running**.
 
-   ![SQL warehouse running](images/07-sql-warehouse-running.png)
+   ![SQL warehouse running](images/07-sql-warehouse-running-redacted.png)
 
 ## 3. Create the schema
 
 1. Open **SQL Editor** and click **SQL Query**.
 
-   ![SQL Editor, new query](images/08-sql-editor-new-query.png)
+   ![SQL Editor, new query](images/08-sql-editor-new-query-redacted.png)
 
 2. In the compute dropdown at the top right select `zerobus-demo`, and
    check that the catalog selector shows `<catalog>`.
 
-   ![Connect the query to the warehouse](images/09-sql-editor-connect-warehouse.png)
+   ![Connect the query to the warehouse](images/09-sql-editor-connect-warehouse-redacted.png)
 
 3. Run:
 
@@ -79,12 +79,12 @@ have none.
    CREATE SCHEMA IF NOT EXISTS <catalog>.<schema>;
    ```
 
-   ![Create schema statement](images/10-sql-editor-create-schema.png)
+   ![Create schema statement](images/10-sql-editor-create-schema-redacted.png)
 
    Requires `USE CATALOG` and `CREATE SCHEMA` on `<catalog>`. Without
    them the statement fails:
 
-   ![Permission denied on CREATE SCHEMA](images/11-create-schema-permission-denied.png)
+   ![Permission denied on CREATE SCHEMA](images/11-create-schema-permission-denied-redacted.png)
 
 ## 4. If you lack permissions to create a schema or catalog
 
@@ -94,7 +94,7 @@ Check who owns the catalogs:
 SELECT catalog_name, catalog_owner FROM system.information_schema.catalogs;
 ```
 
-![Catalog owners](images/12-catalog-owners.png)
+![Catalog owners](images/12-catalog-owners-redacted.png)
 
 A catalog owned by someone else (or by the workspace admins group) means
 you need an owner or admin to grant `USE CATALOG` and `CREATE SCHEMA`
@@ -108,13 +108,13 @@ Creating a catalog of your own is not an alternative without the
   not exist* (the metastore has no root storage, only Default Storage
   through the UI).
 
-  ![CREATE CATALOG storage error](images/13-create-catalog-storage-error.png)
+  ![CREATE CATALOG storage error](images/13-create-catalog-storage-error-redacted.png)
 
 - The **Create a catalog** entry is missing from the **+** menu and the
   **Create** menu in **Catalog** (the UI hides it without the privilege).
 
-  ![Catalog + menu](images/14-catalog-plus-menu.png)
-  ![Catalog Create menu](images/15-catalog-create-menu.png)
+  ![Catalog + menu](images/14-catalog-plus-menu-redacted.png)
+  ![Catalog Create menu](images/15-catalog-create-menu-redacted.png)
 
 Creating the service principal also typically needs admin rights; ask
 for it (or for the service principal manager role) in the same request.
@@ -140,7 +140,7 @@ FROM system.information_schema.tables
 WHERE table_owner = current_user();
 ```
 
-![No direct grants](images/16-existing-privileges-none.png)
+![No direct grants](images/16-existing-privileges-none-redacted.png)
 
 The `samples` catalog (a Delta Sharing share, read-only) and
 `hive_metastore` (legacy, not supported by Zerobus) cannot be used as a
@@ -158,7 +158,7 @@ CREATE TABLE <catalog>.<schema>.zerobus_demo_events (
 );
 ```
 
-![Create table](images/17-create-table-ok.png)
+![Create table](images/17-create-table-ok-redacted.png)
 
 Verify it is a Unity Catalog managed Delta table:
 
@@ -168,7 +168,7 @@ DESCRIBE TABLE EXTENDED <catalog>.<schema>.zerobus_demo_events;
 
 `Type` must be `MANAGED` and `Provider` must be `delta`.
 
-![Describe table](images/18-describe-table-managed-delta.png)
+![Describe table](images/18-describe-table-managed-delta-redacted.png)
 
 ## 7. Service principal and OAuth secret (needs a workspace admin)
 
@@ -188,7 +188,7 @@ create a secret. If **Settings** shows only the **User** section (no
    them in a password manager. Never paste the secret into a chat, a
    ticket or a file in the repository.
 
-![User settings without admin section](images/19-user-settings-no-admin.png)
+![User settings without admin section](images/19-user-settings-no-admin-redacted.png)
 
 **Pitfall met on 16/10/2026:** the first secret was refused by Databricks
 with `Scopes 'all-apis' are not assigned to the client`, even though the

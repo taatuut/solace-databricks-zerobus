@@ -50,7 +50,9 @@ re-check surprising details against Solace's current documentation:
 `cloud-setup/terraform/terraform.tfvars` and Terraform state files are
 git-ignored and must never be committed. Example files hold only
 `CHANGEME` placeholders. Screenshots show real workspace and user
-identifiers, so `docs/images/` is git-ignored too. Before publishing a
+identifiers, so only redacted copies named `<name>-redacted.<ext>` in
+`docs/images/` are committed (see `.gitignore`); redact first, then
+reference only the redacted file. Before publishing a
 fork or a change, scan the full git history, not just the current files:
 a file once committed and later removed is still retrievable.
 

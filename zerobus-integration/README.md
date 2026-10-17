@@ -31,3 +31,19 @@ reference them as `${DATABRICKS_CLIENT_SECRET}`-style placeholders in
 `application.yml` and supply the actual values via `.env` /
 `docker-compose.yml`'s `env_file`, the same way the rest of this repo
 keeps secrets out of committed files (see `../docs/notes-and-gotchas.md`, "Secrets").
+
+## Pinning the image
+
+Docker Hub offers only the `latest` tag, so a plain `docker compose up`
+can pick up a newer image later. To keep runs reproducible, pin the image
+you have tested by its digest. Run this once, after the first successful
+`docker compose up`; it adds the pin to your git-ignored `.env`:
+
+```bash
+cd zerobus-integration
+echo "ZEROBUS_MI_IMAGE=$(docker image inspect solace/solace-micro-integration-databricks-zerobus:latest --format '{{index .RepoDigests 0}}')" >> .env
+docker compose config | grep image
+```
+
+The last command should print the `@sha256:...` reference. To go back to
+`latest`, delete the `ZEROBUS_MI_IMAGE` line from `.env`.

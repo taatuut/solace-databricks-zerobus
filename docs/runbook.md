@@ -18,9 +18,8 @@ Linux; `curl`, `git` and Docker (Path A) are assumed.
 Do Part 1 (Databricks) once. Then do Path A, Path B or both. Both paths
 write to the same Delta table with the same service principal.
 
-Screenshots are in `docs/images/` and are git-ignored (they show real
-workspace and user identifiers), so on a fresh clone the image links are
-broken; the text stands on its own.
+Screenshots are in `docs/images/`. They are redacted (identifiers are
+blacked out), so black boxes in them are intentional.
 
 ## Part 1. Databricks (once)
 
@@ -90,6 +89,9 @@ names; check with `DESCRIBE TABLE EXTENDED` (`Type` = `MANAGED`,
    You receive the **application (client) ID** and the **secret** (shown
    once; send it through a private channel, store it in a password
    manager, never in the repo or a chat).
+   **Write the expiry date (issue date plus 90 days) in your calendar,
+   with a reminder a week earlier.** After that date the pipeline stops
+   authenticating. Rotation steps: `databricks-setup.md`, section 8.
 2. Run the grants (as table owner and as catalog/schema owner or an admin):
 
    ```sql
@@ -173,9 +175,11 @@ a password of your choice for the health check. Leave
 docker compose up -d
 ```
 
-On Apple Silicon Docker warns that the image platform (`linux/amd64`)
-does not match the host and runs it under emulation; startup takes
-about 15 seconds. This is expected.
+The image is `linux/amd64` only; `docker-compose.yml` pins that platform, so
+Apple Silicon runs it under emulation without a warning and startup takes
+about 15 seconds. To pin the exact image version for reproducible runs,
+see [`../zerobus-integration/README.md`](../zerobus-integration/README.md),
+"Pinning the image".
 
 ### A.3 Health check
 
@@ -210,7 +214,7 @@ ORDER BY event_time DESC;
 
 New rows appear within seconds:
 
-![Rows in the Delta table](images/21-delta-table-rows.png)
+![Rows in the Delta table](images/21-delta-table-rows-redacted.png)
 
 ## Path B. Solace Cloud broker + Cloud-Managed Micro-Integration
 
@@ -254,6 +258,21 @@ have spare non-broker capacity: on `aks-eastus-second-dc` the
 Micro-Integration ended in `error` after ~10 minutes with an empty error
 log. The `datacenter_id` can not be changed later (see B.7).
 
+### Shortcut: B.3 to B.5 in one command
+
+After B.1 and B.2 (token, `terraform.tfvars`) and with Part 1 done, one
+script runs B.3, B.4 and B.5 in order. It checks your inputs first and
+asks for confirmation before `terraform apply`:
+
+```bash
+cd cloud-setup
+./setup-cloud.sh preflight
+./setup-cloud.sh up
+```
+
+Then continue with B.6. Prefer the manual steps B.3 to B.5 below if you
+want to see each one separately.
+
 ### B.3 Create the broker service
 
 ```bash
@@ -292,7 +311,7 @@ time with `./micro-integration.sh status`. In the Console under
 **Micro-Integrations** it looks like this; the flow is `Running` and
 the counters show messages passed:
 
-![Cloud-Managed Micro-Integration running, 5 messages passed](images/20-cloud-mi-running.png)
+![Cloud-Managed Micro-Integration running, 5 messages passed](images/20-cloud-mi-running-redacted.png)
 
 ### B.6 Run the demo
 
@@ -308,13 +327,25 @@ on the Micro-Integration page increases and **Total Errors** stays 0.
 If the state is `running` and then goes `down`, open the Console,
 Micro-Integrations, your integration, ellipsis, **View Logs**:
 
-![Error logs of a failed run](images/22-cloud-mi-error-logs.png)
+![Error logs of a failed run](images/22-cloud-mi-error-logs-redacted.png)
 
 That run failed with `Failed to create Zerobus stream for binding
 'output-0' / table '<catalog>.default.output-0'`: the flow had no
 full table name as destination. `micro-integration.sh` now sets it.
 
-### B.7 Tear down
+### B.7 Tear down (when you are done, not before the demo)
+
+The Solace Cloud service and the Micro-Integration keep running, and keep
+using capacity, until you remove them. Keep them while you still need the
+demo; run the commands below only afterwards. Order matters: the
+Micro-Integration first, then the service.
+
+```bash
+cd cloud-setup
+./setup-cloud.sh down
+```
+
+This runs the same steps as the manual commands:
 
 ```bash
 cd cloud-setup/solace-cloud-api

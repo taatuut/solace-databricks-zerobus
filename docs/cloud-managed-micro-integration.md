@@ -133,6 +133,6 @@ added to the trust store) delivered 5 new rows to
 
 Console view of the running Micro-Integration (5 messages, 0 errors):
 
-![Running Micro-Integration](images/20-cloud-mi-running.png)
+![Running Micro-Integration](images/20-cloud-mi-running-redacted.png)
 
 Step-by-step: [`runbook.md`](runbook.md), Path B.
