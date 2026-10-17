@@ -177,8 +177,24 @@ docker compose up -d
 
 The image is `linux/amd64` only; `docker-compose.yml` pins that platform, so
 Apple Silicon runs it under emulation without a warning and startup takes
-about 15 seconds. To pin the exact image version for reproducible runs,
-see [`../zerobus-integration/README.md`](../zerobus-integration/README.md),
+about 15 seconds.
+
+**Pin the Docker image (run once, optional but recommended).** Docker Hub
+only has the `latest` tag, so a later `docker compose up` could pull a newer
+build than the one you tested. Once the Micro-Integration has started
+successfully, pin the exact image you are running by its digest. This adds
+one line to your git-ignored `.env`:
+
+```bash
+cd zerobus-integration
+printf '\nZEROBUS_MI_IMAGE=%s\n' "$(docker image inspect solace/solace-micro-integration-databricks-zerobus:latest --format '{{index .RepoDigests 0}}')" >> .env
+docker compose config | grep image
+```
+
+The last command must print `image: solace/...@sha256:...` and no longer
+`:latest`. Run it only once: a second run adds a duplicate line. To go back
+to `latest`, delete the `ZEROBUS_MI_IMAGE` line from `.env`. Details:
+[`../zerobus-integration/README.md`](../zerobus-integration/README.md),
 "Pinning the image".
 
 ### A.3 Health check

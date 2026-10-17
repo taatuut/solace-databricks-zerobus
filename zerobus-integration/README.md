@@ -41,7 +41,7 @@ you have tested by its digest. Run this once, after the first successful
 
 ```bash
 cd zerobus-integration
-echo "ZEROBUS_MI_IMAGE=$(docker image inspect solace/solace-micro-integration-databricks-zerobus:latest --format '{{index .RepoDigests 0}}')" >> .env
+printf '\nZEROBUS_MI_IMAGE=%s\n' "$(docker image inspect solace/solace-micro-integration-databricks-zerobus:latest --format '{{index .RepoDigests 0}}')" >> .env
 docker compose config | grep image
 ```
 
