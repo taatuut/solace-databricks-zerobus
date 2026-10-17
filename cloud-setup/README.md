@@ -55,8 +55,11 @@ from `.env.example`). Never commit the token or paste it in a chat.
 
 Shortcut for steps 3 to 6 below, after the token and
 `terraform/terraform.tfvars` are in place: `./setup-cloud.sh preflight`,
-then `./setup-cloud.sh up` (and `./setup-cloud.sh down` to remove
-everything again). The manual steps follow.
+then `./setup-cloud.sh up` (`status` shows the Micro-Integration state,
+`down` removes everything again, `--yes` skips the Terraform prompts).
+Details in [`../docs/runbook.md`](../docs/runbook.md). The script is new
+and not yet tested end to end; the manual steps below are the reference
+path.
 
 All commands run from `cloud-setup/solace-cloud-api/` unless noted, in a
 normal terminal (the scripts call the Solace Cloud and broker endpoints).

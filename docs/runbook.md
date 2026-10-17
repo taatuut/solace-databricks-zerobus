@@ -277,8 +277,7 @@ log. The `datacenter_id` can not be changed later (see B.7).
 ### Shortcut: B.3 to B.5 in one command
 
 After B.1 and B.2 (token, `terraform.tfvars`) and with Part 1 done, one
-script runs B.3, B.4 and B.5 in order. It checks your inputs first and
-asks for confirmation before `terraform apply`:
+script runs B.3, B.4 and B.5 in order:
 
 ```bash
 cd cloud-setup
@@ -286,8 +285,24 @@ cd cloud-setup
 ./setup-cloud.sh up
 ```
 
-Then continue with B.6. Prefer the manual steps B.3 to B.5 below if you
-want to see each one separately.
+| Command | What it does |
+|---|---|
+| `./setup-cloud.sh preflight` | Checks tools and input files (`solace-cloud-api/.env`, `terraform/terraform.tfvars`, `../zerobus-integration/.env`). Changes nothing. |
+| `./setup-cloud.sh up` | Creates everything: broker service, broker configuration, Micro-Integration, flow and deploy. Asks for confirmation before `terraform apply`. |
+| `./setup-cloud.sh status` | Shows the state of the Micro-Integration. |
+| `./setup-cloud.sh down` | Removes everything (see B.7). Asks for confirmation before `terraform destroy`. |
+
+Add `--yes` (for example `./setup-cloud.sh up --yes`) to skip the Terraform
+confirmation prompts. `up` is safe to re-run: if it stops halfway (for
+example a timeout), fix the cause and run it again. Finished steps are
+skipped or repeated harmlessly.
+
+> **Note:** this script is new and has not yet been tested end to end. The
+> manual steps B.3 to B.5 below are the reference path. If the script
+> fails, continue with the manual steps from the step that failed, and
+> please open an issue.
+
+Then continue with B.6.
 
 ### B.3 Create the broker service
 
