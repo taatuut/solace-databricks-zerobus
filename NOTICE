@@ -1,0 +1,10 @@
+Solace to Databricks Zerobus ingest demo
+Copyright 2026 Emil Zegers
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This is a personal demo repository and is not an official Solace or
+Databricks project. Solace, PubSub+ and Databricks are trademarks of their
+respective owners. This license does not grant any rights to those
+trademarks, nor to the products this repository integrates with, which are
+governed by their own license terms.

@@ -106,6 +106,12 @@ Delta table, or a service-principal permission that wasn't granted.
 problems already solved), [`docs/topology.md`](docs/topology.md) and
 [`docs/presentation-notes.md`](docs/presentation-notes.md).
 
+## License
+
+Apache License 2.0, see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). The
+license covers the files in this repository only, not the Solace and
+Databricks products it integrates with.
+
 ## Language
 
 Documentation is in English.
