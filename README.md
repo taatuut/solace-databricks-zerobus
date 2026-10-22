@@ -6,7 +6,7 @@ Catalog managed Delta table, with no custom ETL job and no Kafka hop in
 between.
 
 > **Not an official Solace project.** This is a personal demo repository,
-> provided as is, without warranty or support. Solace, PubSub+ and Databricks
+> provided as is, without warranty or support. Solace and Databricks
 > are trademarks of their respective owners. The Micro-Integration for
 > Databricks Zerobus is a Beta product; details may change.
 
